@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Ajout d'un nouveau produit</h1>
+        <form enctype="multipart/form-data" class="dropzone" action="{{ path("create")}}" method="post">
+        <div class="form-group">
+            {{ form_row(formProduct.name,{'attr':{"palceholder":"Nom du produit"}}) }}
+            {{ form_row(formProduct.price,{'attr':{'palceholder':"Nom du produit",'class':"form-control"} }) }}
+            {{ form_row(formProduct.quantity,{'attr':{'palceholder':"Nom du produit",'class':"form-control"} }) }}
+            {{ form_row(formProduct.description,{'attr':{'palceholder':"Nom du produit",'class':"form-control"}}) }}
+            {{ form_row(formProduct.photo,{'attr':{'name':"file"}}) }}
+            <button type="submit" class="btn btn-success">Ajouter</button>
+        </div>
+        {{ form_end(formProduct) }}
+    </div>
+{% endblock %}

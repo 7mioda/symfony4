@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+        {% for product in products %}
+
+            <div class="col-md-4 column productbox">
+                {% if product.photo  %}
+                <img src="\uploads\{{ product.photo }}" class="img-responsive">
+                {% else %}
+                <img src="http://placehold.it/460x250/text=PRODUCT" class="img-responsive">
+                {% endif %}
+                <div class="producttitle">{{ product.name }}</div>
+                <div class="productprice">
+                    <div class="pull-right"><a href="{{ path("show",{"id" : product.id}) }}" class="btn btn-primary btn-sm" role="button">Acheter</a></div>
+                    <div class="pricetext">{{ product.price }}</div>
+                </div>
+
+
+            </div>
+        {% endfor %}
+        {{ knp_pagination_render(products) }}
+
+{% endblock %}
