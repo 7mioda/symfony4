@@ -43,10 +43,36 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
+     * @ORM\Column(type="json_array")
+     */
+    private $roles = array();
+
+    /**
      * @Assert\NotBlank()
      *  @Assert\EqualTo(propertyPath="password",message="recheck your password")
      */
     private $confirmPassword;
+
+    /**
+     * @return array
+     */
+    public function getRoles()
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param array $roles
+     * @return User
+     */
+    public function setRoles(array $roles):self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
 
     public function getId()
     {
@@ -105,26 +131,6 @@ class User implements UserInterface, \Serializable
         $this->confirmPassword = $confirmPassword;
     }
 
-    /**
-     * Returns the roles granted to the user.
-     *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
-     *
-     * Alternatively, the roles might be stored on a ``roles`` property,
-     * and populated in any number of different ways when the user object
-     * is created.
-     *
-     * @return (Role|string)[] The user roles
-     */
-    public function getRoles()
-    {
-        return ["ROLE_USER"];
-    }
 
     /**
      * Returns the salt that was originally used to encode the password.
@@ -157,7 +163,7 @@ class User implements UserInterface, \Serializable
      */
     public function getUsername()
     {
-        // TODO: Implement getUsername() method.
+        return $this->name;
     }
 
     /**

@@ -35,12 +35,13 @@ class ProductController extends Controller
     public function managment(Request $request,ProductRepository $repository,Paginator $paginator)
     {
         $productslist = $repository->findAll();
+        $default = ($request->query->get('page')!=null)?( $request->query->get('page')):1;
         $products  = $paginator->paginate(
             $productslist,
-            $request->query->get('page', 1)/*le numéro de la page à afficher*/,12
+            $default/*le numéro de la page à afficher*/,12
         /*nbre d'éléments par page*/
         );
-        return $this->render('product/showAdmin.html.twig', ["products" => $products]);
+        return $this->render('product/showAdmin.html.twig', ["products" => $products,"page"=>$default]);
     }
 
     /**
@@ -53,6 +54,7 @@ class ProductController extends Controller
     public function show(Request $request,ProductRepository $repository,Paginator $paginator)
     {
         $productslist = $repository->findAll();
+
         $products  = $paginator->paginate(
             $productslist,
             $request->query->get('page', 1)/*le numéro de la page à afficher*/,12
@@ -77,11 +79,11 @@ class ProductController extends Controller
      * @Route("/managment/product/new",name="create")
      * @param Request $request
      * @param ObjectManager $manager
+     * @param FileUploader $fileUploader
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function make(Request $request, ObjectManager $manager)
+    public function make(Request $request, ObjectManager $manager,FileUploader $fileUploader)
     {
-        $fileUploader = new FileUploader('C:\laragon\www\my-project\public\uploads');
         $product = new Product();
         $form = $this->createFormBuilder($product)
             ->add("name")
@@ -92,10 +94,6 @@ class ProductController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $product->getPhoto();
-            $fileName = $fileUploader->upload($file);
-
-            $product->setPhoto($fileName);
             $manager->persist($product);
             $manager->flush();
             return $this->redirectToRoute("productManagment");
@@ -107,17 +105,17 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/managment/product/delete/{id}",name="delete")
+     * @Route("/managment/product/delete/{id}/{page}",name="delete")
      * @param Request $request
      * @param ObjectManager $manager
      * @param Product $product
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function delete(Request $request, ObjectManager $manager,Product $product){
+    public function delete(Request $request, ObjectManager $manager,Product $product,$page){
 
         $manager->remove($product);
         $manager->flush();
-        return $this->redirectToRoute("productManagment");
+        return $this->redirectToRoute("productManagment",["page"=>$page]);
 
     }
 }

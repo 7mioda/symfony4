@@ -7,7 +7,10 @@
 
 // any CSS you require will output into a single css file (app.css in this case)
 require('../css/app.css');
+require('../css/product.css');
+require('../css/managment.css');
 require('../../node_modules/dropzone/dist/dropzone.css');
+require('../../node_modules/bootstrap/dist/css/bootstrap.css');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
  var $ = require('jquery');

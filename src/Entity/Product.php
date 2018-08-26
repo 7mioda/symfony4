@@ -37,9 +37,24 @@ class Product
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255 , nullable= true)
      */
     private $photo;
+    /**
+     * @ORM\Column(type="datetime", options={"default" : NULL})
+     */
+    private $created_at;
+    /**
+     * @ORM\Column(type="datetime", options={"default" : NULL})
+     */
+    private $updated_at;
+
+
+    public  function __construct()
+    {
+        $this->created_at = new \DateTime();
+        $this->updated_at = new \DateTime();
+    }
 
     public function getId()
     {
@@ -109,6 +124,42 @@ class Product
     public function setPhoto($photo):self
     {
         $this->photo = $photo;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param mixed $created_at
+     * @return Product
+     */
+    public function setCreatedAt($created_at): self
+    {
+        $this->created_at = $created_at;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @param mixed $updated_at
+     * @return Product
+     */
+    public function setUpdatedAt($updated_at):self
+    {
+        $this->updated_at = $updated_at;
         return $this;
     }
 }
